@@ -38,9 +38,11 @@
     </form>
 
     <section id="indicator-grid" class="w-full max-w-4xl overflow-x-auto mb-6">
-      <%= render(IndicatorGridComponent.new( signals: @signals || {},
-      timeframes: ["15m", "1h", "2h", "4h", "24h", "48h", "1w", "1mo"],
-      indicators: %w[rsi macd ttm_squeeze volume_spike ma_ribbon] )) %>
+      <div id="scan_results">
+        <%= render(IndicatorGridComponent.new( signals: @signals || {},
+        timeframes: ["15m", "1h", "2h", "4h", "24h", "48h", "1w", "1mo"],
+        indicators: %w[rsi macd ttm_squeeze volume_spike ma_ribbon] )) %>
+      </div>
     </section>
 
     <section id="tradingview-widget" class="w-full max-w-4xl mb-6">

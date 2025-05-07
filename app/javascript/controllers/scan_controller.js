@@ -9,6 +9,7 @@ export default class extends Controller {
     const data = new FormData(form);
     // Get CSRF token from meta tag
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
     fetch("/scan", {
       method: "POST",
       headers: {
@@ -17,13 +18,32 @@ export default class extends Controller {
       },
       body: data,
     })
-      .then((r) => r.text())
-      .then((html) => {
-        Turbo.renderStreamMessage(html);
-        const ticker = form
-          .querySelector('input[name="ticker"]')
-          .value.toUpperCase();
-        setTimeout(() => this.updateTradingView(ticker), 100);
+      .then(response => {
+        if (response.ok) {
+          return response.text().then(html => {
+            // Process successful response
+            Turbo.renderStreamMessage(html);
+            const ticker = form.querySelector('input[name="ticker"]').value.toUpperCase();
+            setTimeout(() => this.updateTradingView(ticker), 100);
+          });
+        } else {
+          // Handle HTTP error responses (like 422, 500)
+          return response.text().then(html => {
+            try {
+              // Try to parse as Turbo stream
+              Turbo.renderStreamMessage(html);
+            } catch (e) {
+              // If not a valid Turbo stream, show a generic error
+              this.showError(`Error: ${response.statusText}`);
+              console.error("Response error:", html);
+            }
+          });
+        }
+      })
+      .catch(error => {
+        // Handle network errors
+        this.showError(`Network error: ${error.message}`);
+        console.error("Fetch error:", error);
       });
   }
 

@@ -1,0 +1,15 @@
+<div id="scan_results">
+  <% if result[:error].present? %>
+    <div class="alert alert-danger">
+      <h4>Error</h4>
+      <p><%= result[:error] %></p>
+    </div>
+  <% else %>
+    <%= render(IndicatorGridComponent.new(
+      signals: result[:signals] || {},
+      ticker: result[:ticker],
+      timeframes: ["15m", "1h", "2h", "4h", "24h", "48h", "1w", "1mo"],
+      indicators: %w[rsi macd ttm_squeeze volume_spike ma_ribbon]
+    )) %>
+  <% end %>
+</div>
