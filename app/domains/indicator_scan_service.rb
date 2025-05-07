@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "indicator_helpers"
+
 # Service: Validates ticker, fetches candles, computes indicator signals for all timeframes
 class IndicatorScanService
   TIMEFRAMES = {
@@ -22,7 +24,7 @@ class IndicatorScanService
   def call
     return { error: "Ticker required" } if @ticker.blank?
     # Validate ticker via API (Alpha Vantage, Finnhub, Binance)
-    valid = TickerValidator.valid?(@ticker)
+    valid = ::TickerValidator.valid?(@ticker)
     return { error: "Invalid ticker" } unless valid
 
     signals = {}

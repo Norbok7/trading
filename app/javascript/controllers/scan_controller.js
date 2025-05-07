@@ -7,9 +7,14 @@ export default class extends Controller {
     event.preventDefault();
     const form = event.target;
     const data = new FormData(form);
+    // Get CSRF token from meta tag
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     fetch("/scan", {
       method: "POST",
-      headers: { Accept: "text/vnd.turbo-stream.html" },
+      headers: {
+        Accept: "text/vnd.turbo-stream.html",
+        "X-CSRF-Token": token
+      },
       body: data,
     })
       .then((r) => r.text())
