@@ -1,27 +1,29 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["form", "input", "grid", "alerts", "widget"]
+  static targets = ["form", "input", "grid", "alerts", "widget"];
 
   submit(event) {
-    event.preventDefault()
-    const form = event.target
-    const data = new FormData(form)
+    event.preventDefault();
+    const form = event.target;
+    const data = new FormData(form);
     fetch("/scan", {
       method: "POST",
-      headers: { "Accept": "text/vnd.turbo-stream.html" },
-      body: data
+      headers: { Accept: "text/vnd.turbo-stream.html" },
+      body: data,
     })
-      .then(r => r.text())
-      .then(html => {
-        Turbo.renderStreamMessage(html)
-        const ticker = form.querySelector('input[name="ticker"]').value.toUpperCase()
-        setTimeout(() => this.updateTradingView(ticker), 100)
-      })
+      .then((r) => r.text())
+      .then((html) => {
+        Turbo.renderStreamMessage(html);
+        const ticker = form
+          .querySelector('input[name="ticker"]')
+          .value.toUpperCase();
+        setTimeout(() => this.updateTradingView(ticker), 100);
+      });
   }
 
   showError(msg) {
-    alert(msg) // TODO: Replace with toast
+    alert(msg); // TODO: Replace with toast
   }
 
   renderGrid(data) {
@@ -29,11 +31,11 @@ export default class extends Controller {
   }
 
   updateTradingView(ticker) {
-    const widgetDiv = document.getElementById("tradingview-widget-inner")
-    if (!widgetDiv) return
-    widgetDiv.innerHTML = ""
-    const script = document.createElement("script")
-    script.src = "https://s3.tradingview.com/tv.js"
+    const widgetDiv = document.getElementById("tradingview-widget-inner");
+    if (!widgetDiv) return;
+    widgetDiv.innerHTML = "";
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/tv.js";
     script.onload = () => {
       // eslint-disable-next-line no-undef
       new TradingView.widget({
@@ -47,9 +49,9 @@ export default class extends Controller {
         hide_top_toolbar: true,
         hide_legend: false,
         allow_symbol_change: true,
-        autosize: true
-      })
-    }
-    document.body.appendChild(script)
+        autosize: true,
+      });
+    };
+    document.body.appendChild(script);
   }
 }

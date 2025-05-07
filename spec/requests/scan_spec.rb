@@ -11,7 +11,7 @@ RSpec.describe 'Scan API', type: :request do
           ticker: { type: :string, example: 'BTCUSDT' },
           timeframes: { type: :array, items: { type: :string }, example: %w[1h 4h] }
         },
-        required: ['ticker']
+        required: [ 'ticker' ]
       }
       response '200', 'scan result' do
         schema type: :object,

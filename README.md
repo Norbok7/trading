@@ -22,6 +22,7 @@ bin/rubocop         # Check code style
 ```
 
 ## Features
+
 - Ticker validation (Binance, Alpha Vantage, Finnhub)
 - Indicator grid (RSI, MACD, TTM Squeeze, Volume Spike, MA Ribbon)
 - Multi-timeframe scan (15m–1mo)
